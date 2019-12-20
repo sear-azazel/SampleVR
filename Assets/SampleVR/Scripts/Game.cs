@@ -8,6 +8,11 @@ public class Game : MonoBehaviour
     [SerializeField] private Text countdownText;
     private Coroutine countdown = null;
 
+    private void Start()
+    {
+        XRUtility.IsEnabled = true;
+    }
+
     public void OnEnter()
     {
         this.countdown = this.StartCoroutine(this.Countdown());
@@ -21,15 +26,15 @@ public class Game : MonoBehaviour
 
     private IEnumerator Countdown()
     {
-        const int sec = 2;
-        float start = Time.realtimeSinceStartup;
-        float elapsed = sec;
-        do
+        const int sec = 3;
+        float elapsed = 0;
+        while (elapsed < sec)
         {
             this.countdownText.text = $"{(int)(sec - elapsed)}";
-            elapsed = Time.realtimeSinceStartup - start;
+            elapsed += Time.fixedDeltaTime;
             yield return null;
-        } while (elapsed < sec);
+        }
         SceneManager.LoadScene("Menu");
+        XRUtility.IsEnabled = false;
     }
 }
